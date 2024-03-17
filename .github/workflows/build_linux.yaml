@@ -9,6 +9,10 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libasound2-dev build-essential
+          version: 1.0
       - uses: actions/checkout@master
       - name: Compile
         id: compile
