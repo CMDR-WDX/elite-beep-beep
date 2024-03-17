@@ -2,24 +2,20 @@ name: Build Windows
 
 on:
   push:
-    branches: [never]
+    branches: [main]
 
 jobs:
   build:
     name: Build
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Compile
-        id: compile
-        uses: rust-build/rust-build.action@v1.4.5
+      - uses: actions/checkout@v3
+      - uses: actions-rs/toolchain@v1
         with:
-          RUSTTARGET: x86_64-pc-windows-msvc
-          UPLOAD_MODE: none
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+          toolchain: stable
+      - run: cargo build --release --target x86_64-pc-windows-msvc
+      - uses: actions/upload-artifact@v3
         with:
-          name: Binary
-          path: |
-            ${{ steps.compile.outputs.BUILT_ARCHIVE }}
-            ${{ steps.compile.outputs.BUILT_CHECKSUM }}
+          name: build-linux
+          path: target/x86_64-pc-windows-msvc/release/elite-beep-beep.exe
+          overwrite: true
