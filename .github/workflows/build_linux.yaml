@@ -14,9 +14,11 @@ jobs:
           packages: libasound2-dev build-essential libxi-dev libxtst6 pkg-config xorg-dev
           version: 1.0
       - uses: actions/checkout@v3
-      - name: Build
-        run: cargo build --verbose
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
       - run: cargo build --release --target x86_64-unknown-linux-gnu
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build-linux
+          path: /target/x86_64-unknown-linux-gnu/release/elite-beep-beep
