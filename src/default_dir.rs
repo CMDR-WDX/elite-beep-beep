@@ -19,17 +19,8 @@ pub fn try_get_default_directory() -> anyhow::Result<PathBuf> {
             "Failed to find home directory. As such, cannot try to infer LocalAppdata, and so on.",
         )
     })?;
-    eprintln!("Home dir is {:?}", home_dir);
     let commander_history =
-        home_dir.join("AppData/Local/Frontier Developments/Elite Dangerous/CommanderHistory");
-    eprint!("History Dir is {:?}", commander_history);
-    eprint!(
-        "Does History Dir exist? {}",
-        match commander_history.exists() {
-            true => "yes",
-            false => "no",
-        }
-    );
+        home_dir.join("AppData\\Local\\Frontier Developments\\Elite Dangerous\\CommanderHistory");
 
     if commander_history.exists() {
         return Ok(commander_history);

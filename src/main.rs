@@ -2,6 +2,7 @@ mod default_dir;
 pub mod history;
 
 use anyhow::anyhow;
+use colored::Colorize;
 use itertools::Itertools;
 use notify_debouncer_mini::{new_debouncer, DebounceEventResult};
 use rodio::source::SineWave;
@@ -33,6 +34,8 @@ pub fn main() -> anyhow::Result<()> {
     let (_stream, audio_device) = OutputStream::try_default().unwrap();
     let audio_sink = Sink::try_new(&audio_device).unwrap();
     audio_sink.set_volume(0.1);
+
+    play_beep(&audio_sink);
 
     let state: Arc<Mutex<HashMap<OsString, Vec<MetInteraction>>>> =
         Arc::new(Mutex::new(HashMap::new()));
@@ -127,6 +130,15 @@ pub fn main() -> anyhow::Result<()> {
                 eprintln!("watch error: {:?}", err)
             }
             Ok(events) => {
+                eprintln!(
+                    "{} - Received event count {}",
+                    "DEBUG".yellow(),
+                    events.len()
+                );
+                let _ = &events
+                    .iter()
+                    .for_each(|x| eprintln!("> {} - {:#?}", "DEBUG".yellow(), x));
+
                 let paths: Vec<_> = events
                     .iter()
                     .filter(|x| match x.kind {
